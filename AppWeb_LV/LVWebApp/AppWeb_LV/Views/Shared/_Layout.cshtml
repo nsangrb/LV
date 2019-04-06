@@ -1,0 +1,174 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+    <title>ASP.NET MVC Chart Samples using CanvasJS</title>
+
+    <!-- stylesheets -->
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/style.css" rel="stylesheet" type="text/css" />
+
+    <!-- scripts -->
+    <script src="~/Scripts/modernizr-2.8.3.js"></script>
+    <!--[if lt IE 9 ]>
+        <script src="/Scripts/html5shiv.min.js"></script>
+        <script src="/Scripts/respond.min.js"></script>
+    <![endif]-->
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
+    <script>
+        $(function () {
+            // #sidebar-toggle-button
+            $('#sidebar-toggle-button').on('click', function () {
+                $('#sidebar').toggleClass('sidebar-toggle');
+                $('#page-content-wrapper').toggleClass('page-content-toggle');
+                fireResize();
+            });
+
+            // sidebar collapse behavior
+            $('#sidebar').on('show.bs.collapse', function () {
+                $('#sidebar').find('.collapse.in').collapse('hide');
+            });
+
+            // To make current link active
+            (function addActiveClassToNestedList() {
+                var pageURL = $(location).attr('href');
+                var URLSplits = pageURL.split('/');
+
+                var routeURL = '/' + URLSplits[URLSplits.length - 3] + '/' + URLSplits[URLSplits.length - 2] + '/';
+                var activeNestedList = $('.sub-menu > li > a[href="' + routeURL + '"]').parent();
+
+                if (activeNestedList.length !== 0 && !activeNestedList.hasClass('active')) {
+                    $('.sub-menu > li').removeClass('active');
+                    activeNestedList.addClass('active');
+                }
+            })();
+
+            function fireResize() {
+                if (document.createEvent) { // W3C
+                    var ev = document.createEvent('Event');
+                    ev.initEvent('resize', true, true);
+                    window.dispatchEvent(ev);
+                }
+                else { // IE
+                    element = document.documentElement;
+                    var event = document.createEventObject();
+                    element.fireEvent("onresize", event);
+                }
+            }
+
+        });
+    </script>
+
+</head>
+<body>
+    <!-- header -->
+    <nav id="header" class="navbar navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <div id="sidebar-toggle-button">
+                    <i class="fa fa-bars" aria-hidden="true"></i>
+                </div>
+                <div class="brand">
+                    <a href="/">
+                        Luan Van Web App <span class="hidden-xs text-muted">ASP.NET MVC</span>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </nav>
+    <!-- /header -->
+    <!-- sidebar -->
+    <div id="sidebar" class="sidebar-toggle">
+        <ul class="nav nav-sidebar">
+            <li>
+                <a href="/">
+                    <i class="fa fa-home" aria-hidden="true"></i>
+                    <span>HOME</span>
+                </a>
+            </li>
+            <li role="separator" class="divider"></li>
+
+            <!-- node1 -->
+            <li data-toggle="collapse" href="#node1" aria-expanded="false" aria-controls="node-1">
+                <a href="#">
+                    <i class="fa fa-area-chart" aria-hidden="true" style="width: 13px;"></i>
+                    <span>NODE 1</span>
+                </a>
+            </li>
+
+            <li>
+                <ul id="node1" class="sub-menu collapse @if(Request.Url.AbsoluteUri.ToString().Contains("Node1/")) { @Html.Raw("in") }">
+                    <li><a href="/Node1/All/">All</a></li>
+                    <li><a href="/Node1/Temp/">Temperature</a></li>
+                    <li><a href="/Node1/Light/">Light</a></li>
+                    <li><a href="/Node1/Humidity/">Humidity</a></li>
+                </ul>
+            </li>
+            <!-- /node1 -->
+
+            <li role="separator" class="divider"></li>
+
+            <!--  node2 -->
+            <li data-toggle="collapse" href="#node2" aria-expanded="false" aria-controls="node-2">
+                <a href="#">
+                    <i class="fa fa-area-chart" aria-hidden="true"></i>
+                    <span>NODE 2</span>
+                </a>
+            </li>
+
+            <li>
+                <ul id="node2" class="sub-menu collapse @if(Request.Url.AbsoluteUri.ToString().Contains("Node2/")) { @Html.Raw("in") }">
+                    <li><a href="/Node2/All/">All</a></li>
+                    <li><a href="/Node2/Temp/">Temperature</a></li>
+                    <li><a href="/Node2/Light/">Light</a></li>
+                    <li><a href="/Node2/Humidity/">Humidity</a></li>
+                </ul>
+            </li>
+            <!--  /node2 -->
+
+            <li role="separator" class="divider"></li>
+
+            <!--  config  -->
+            <li>
+                <a href="/Config/Config/">
+                    <i class="fa fa-wrench" aria-hidden="true"></i>
+                    <span>CONFIG</span>
+                </a>
+            </li>
+
+            <!--  /config  -->
+
+            <li role="separator" class="divider"></li>
+        </ul>
+    </div>
+    <!-- /#sidebar -->
+    <!-- page-content-wrapper -->
+    <div id="page-content-wrapper" class="page-content-toggle">
+        <div class="container-fluid">
+            <h1>@ViewBag.Title</h1>
+
+            <div class="row">
+                <div id="content" class="col-md-8 col-md-offset-1 col-xs-12">
+                    @RenderBody()
+                </div> <!-- /content-->
+            </div> <!-- /row -->
+        </div> <!-- /container-fluid -->
+        <!-- footer -->
+        <div id="footer">
+            <p class="text-muted">&#169; 2017 fenopix</p>
+        </div>
+        <!-- /footer -->
+    </div>
+    <!-- /page-content-wrapper -->
+
+</body>
+</html>

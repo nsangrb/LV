@@ -1,0 +1,28 @@
+--cpu Cortex-M3
+"lv_test\startup_stm32f103xb.o"
+"lv_test\ds18b20_mflib.o"
+"lv_test\bh1750_lib.o"
+"lv_test\main.o"
+"lv_test\stm32f1xx_it.o"
+"lv_test\stm32f1xx_hal_msp.o"
+"lv_test\stm32f1xx_hal_gpio_ex.o"
+"lv_test\stm32f1xx_hal_adc.o"
+"lv_test\stm32f1xx_hal_adc_ex.o"
+"lv_test\stm32f1xx_hal_i2c.o"
+"lv_test\stm32f1xx_hal_tim.o"
+"lv_test\stm32f1xx_hal_tim_ex.o"
+"lv_test\stm32f1xx_hal_uart.o"
+"lv_test\stm32f1xx_hal.o"
+"lv_test\stm32f1xx_hal_rcc.o"
+"lv_test\stm32f1xx_hal_rcc_ex.o"
+"lv_test\stm32f1xx_hal_gpio.o"
+"lv_test\stm32f1xx_hal_dma.o"
+"lv_test\stm32f1xx_hal_cortex.o"
+"lv_test\stm32f1xx_hal_pwr.o"
+"lv_test\stm32f1xx_hal_flash.o"
+"lv_test\stm32f1xx_hal_flash_ex.o"
+"lv_test\system_stm32f1xx.o"
+--library_type=microlib --strict --scatter "LV_Test\LV_Test.sct"
+--summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list "LV_Test.map" -o LV_Test\LV_Test.axf

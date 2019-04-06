@@ -1,0 +1,237 @@
+﻿<select id="mode" name="option" onchange="changemode()" disabled>
+    <option value="0">Auto</option>
+    <option value="1">Manual</option>
+</select>
+<input onclick="changename()" type="button" value="Modify" id="Btn">
+<br />
+<div id="_node1" style="width: 49%; height: 400px;display: inline-block; text-align:center; border:2px solid #d3d3d3;">
+    <br />
+    <br />
+    <center><h2>NODE 1 THRESHOLD</h2></center>
+    <br />
+    <h4>
+        <label for="Tht1">Temperature</label><br />
+        <input id="Tht1" type="number" size="6" step="any" style="width: 49%; text-align:right" min="-55" max="125" disabled>
+        <br /><br />
+        <label for="Thl1">Light</label><br />
+        <input id="Thl1" type="number" size="6" step="any" style="width: 49%; text-align:right" min="1" max="65535" disabled>
+        <br /><br />
+        <label for="Rhh1">Humidity</label><br />
+        <input id="Thh1" type="number" size="6" step="any" style="width: 49%; text-align:right" min="0" max="100" disabled>
+        <br /><br />
+    </h4>
+</div>
+<div id="_node2" style="width: 49%; height: 400px;display: inline-block; text-align:center;  border:2px solid #d3d3d3;">
+    <br />
+    <br />
+    <center><h2>NODE 2 THRESHOLD</h2></center>
+    <br />
+    <h4>
+        <label for="Tht2">Temperature</label><br />
+        <input id="Tht2" type="number" size="6" step="any" style="width: 49%; text-align:right" min="-55" max="125" disabled>
+        <br /><br />
+        <label for="Thl2">Light</label><br />
+        <input id="Thl2" type="number" size="6" step="any" style="width: 49%; text-align:right" min="1" max="65535" disabled>
+        <br /><br />
+        <label for="Thh2">Humidity</label><br />
+        <input id="Thh2" type="number" size="6" step="any" style="width: 49%; text-align:right" min="0" max="100" disabled>
+        <br /><br />
+    </h4>
+</div>
+<br />
+<div id="rl" style="width: 98.5%; height: 330px; display: none; text-align:center; border:2px solid #d3d3d3;" >
+    <h2>RELAY STATUS</h2>
+    <div style="width: 49%; height: 200px;display: inline-block; text-align:center; ">
+        <label for="RL1">RL1</label><br />
+        <canvas id="RL1" onclick="changestate(1)" width="100" height="50">
+            Trình duyệt này không hỗ trợ phần tử canvas.
+        </canvas><br />
+        <label for="RL2">RL2</label><br />
+        <canvas id="RL2" onclick="changestate(2)" width="100" height="50">
+            Trình duyệt này không hỗ trợ phần tử canvas.
+        </canvas><br />
+        <label for="RL3">RL3</label><br />
+        <canvas id="RL3" onclick="changestate(3)" width="100" height="50">
+            Trình duyệt này không hỗ trợ phần tử canvas.
+        </canvas>
+    </div>
+    <div style="width: 49%; height: 200px;display: inline-block; text-align:center; ">
+        <label for="RL4">RL4</label><br />
+        <canvas id="RL4" onclick="changestate(4)" width="100" height="50">
+            Trình duyệt này không hỗ trợ phần tử canvas.
+        </canvas><br />
+        <label for="RL5">RL5</label><br />
+        <canvas id="RL5" onclick="changestate(5)" width="100" height="50">
+            Trình duyệt này không hỗ trợ phần tử canvas.
+        </canvas><br />
+        <label for="RL6">RL6</label><br />
+        <canvas id="RL6" onclick="changestate(6)" width="100" height="50">
+            Trình duyệt này không hỗ trợ phần tử canvas.
+        </canvas>
+    </div>
+</div>
+<script type="text/javascript">
+    var str1 = "", str2 = "", a_str1 = [], a_str2 = [];
+    var c;
+    var ctx;
+    var grd;
+    var updateInterval = 100;
+    function changestate(rl) {
+        if (document.getElementById("Btn").value == "Update" && document.getElementById("mode").value == 1 ) {
+            c = document.getElementById("RL" + String(rl));
+            if (a_str1[rl] == "0") {
+                a_str1[rl] = "1";
+                ctx = c.getContext("2d");
+                ctx.clearRect(0, 0, 100, 50);
+                grd = ctx.createRadialGradient(50, 25, 1, 50, 25, 50);
+                grd.addColorStop(1, "white");
+                grd.addColorStop(0, "green");
+                ctx.beginPath();
+                ctx.fillStyle = grd;
+                ctx.arc(50, 25, 20, 0, 2 * Math.PI);
+                ctx.strokeStyle = "white";
+                ctx.stroke();
+                ctx.fill();
+                ctx.closePath();
+            }
+            else {
+                a_str1[rl] = "0";
+                ctx = c.getContext("2d");
+                ctx.clearRect(0, 0, 100, 50);
+                grd = ctx.createRadialGradient(50, 25, 1, 50, 25, 50);
+                grd.addColorStop(1, "white");
+                grd.addColorStop(0, "red");
+                ctx.beginPath();
+                ctx.fillStyle = grd;
+                ctx.arc(50, 25, 20, 0, 2 * Math.PI);
+                ctx.strokeStyle = "white";
+                ctx.stroke();
+                ctx.fill();
+                ctx.closePath();
+            }
+
+        }
+    }
+   function changename() {
+       var elem = document.getElementById("Btn");
+       if (elem.value == "Modify") {
+           elem.value = "Update";
+           document.getElementById("mode").disabled = false;
+           document.getElementById("Tht1").disabled = false;
+           document.getElementById("Thl1").disabled = false;
+           document.getElementById("Thh1").disabled = false;
+           document.getElementById("Tht2").disabled = false;
+           document.getElementById("Thl2").disabled = false;
+           document.getElementById("Thh2").disabled = false;
+       }
+       else {
+           document.getElementById("mode").disabled = true;
+           document.getElementById("Tht1").disabled = true;
+           document.getElementById("Thl1").disabled = true;
+           document.getElementById("Thh1").disabled = true;
+           document.getElementById("Tht2").disabled = true;
+           document.getElementById("Thl2").disabled = true;
+           document.getElementById("Thh2").disabled = true;
+
+           var s1 = a_str1[0] + " " + a_str1[1] + " " + a_str1[2] + " " + a_str1[3] + " " + a_str1[4] + " " + a_str1[5] + " " + a_str1[6];
+           //$.get("/Config/Stt_RL?stt=" + s, function () {
+           //});
+
+           a_str2[0] = String(document.getElementById("Tht1").value);
+           a_str2[1] = String(document.getElementById("Thl1").value);
+           a_str2[2] = String(document.getElementById("Thh1").value/100);
+           a_str2[3] = String(document.getElementById("Tht2").value);
+           a_str2[4] = String(document.getElementById("Thl2").value);
+           a_str2[5] = String(document.getElementById("Thh2").value/100);
+           var s2 = a_str2[0] + " " + a_str2[1] + " " + a_str2[2] + " " + a_str2[3] + " " + a_str2[4] + " " + a_str2[5];
+           //$.get("/Config/ThresHold?thres=" + s, function () {
+           //});
+           $.get("/Config/Stt_RL", function () { });
+           $.post("/Config/Stt_RL", { stt: s1 });
+           $.get("/Config/ThresHold", function () { });
+           $.post("/Config/ThresHold", { thres: s2 });
+           elem.value = "Modify";
+
+       }
+    }
+
+    function changemode() {
+        var elem = document.getElementById("mode");
+        if (elem.value == 1) {
+            a_str1[0] = "Manual";
+            document.getElementById("rl").style.display = "inline-block";
+            document.getElementById("_node1").style.display = "none";
+            document.getElementById("_node2").style.display = "none";
+        }
+        else {
+            a_str1[0] = "Auto";
+            document.getElementById("rl").style.display = "none";
+            document.getElementById("_node1").style.display = "inline-block";
+            document.getElementById("_node2").style.display = "inline-block";
+        }
+    }
+    
+    var updateInfo = function () {
+        
+        if (document.getElementById("Btn").value == "Modify") {
+            $.get("/RL.txt", function (data, status) {
+                str1 = data;
+            });
+            a_str1 = str1.split(' ');
+            for (var i = 1; i < a_str1.length; i++) {
+                c = document.getElementById("RL" + String(i));
+                if (a_str1[i] == "0") {
+                    ctx = c.getContext("2d");
+                    ctx.clearRect(0, 0, 100, 50);
+                    grd = ctx.createRadialGradient(50, 25, 1, 50, 25, 50);
+                    grd.addColorStop(1, "white");
+                    grd.addColorStop(0, "red");
+                    ctx.beginPath();
+                    ctx.fillStyle = grd;
+                    ctx.arc(50, 25, 20, 0, 2 * Math.PI);
+                    ctx.strokeStyle = "white";
+                    ctx.stroke();
+                    ctx.fill();
+                    ctx.closePath();
+                }
+                else {
+                    ctx = c.getContext("2d");
+                    ctx.clearRect(0, 0, 100, 50);
+                    grd = ctx.createRadialGradient(50, 25, 1, 50, 25, 50);
+                    grd.addColorStop(1, "white");
+                    grd.addColorStop(0, "green");
+                    ctx.beginPath();
+                    ctx.fillStyle = grd;
+                    ctx.arc(50, 25, 20, 0, 2 * Math.PI);
+                    ctx.strokeStyle = "white";
+                    ctx.stroke();
+                    ctx.fill();
+                    ctx.closePath();
+                }
+            }
+            if (!a_str1[0].includes("Auto")) {
+                document.getElementById("mode").value = 1;
+                document.getElementById("rl").style.display = "inline-block";
+                document.getElementById("_node1").style.display = "none";
+                document.getElementById("_node2").style.display = "none";
+            }
+            else {
+                document.getElementById("mode").value = 0;
+                document.getElementById("rl").style.display = "none";
+                document.getElementById("_node1").style.display = "inline-block";
+                document.getElementById("_node2").style.display = "inline-block";
+            }
+            $.get("/TH.txt", function (data, status) {
+                str2 = data;
+            });
+            a_str2 = str2.split(' ');
+            document.getElementById("Tht1").value = Number(a_str2[0]);
+            document.getElementById("Thl1").value = Number(a_str2[1]);
+            document.getElementById("Thh1").value = Math.round(a_str2[2] * 1000) / 10;
+            document.getElementById("Tht2").value = Number(a_str2[3]);
+            document.getElementById("Thl2").value = Number(a_str2[4]);
+            document.getElementById("Thh2").value = Math.round(a_str2[5] * 1000) / 10;
+        }
+    }
+    setInterval(function () { updateInfo() }, updateInterval);
+</script>

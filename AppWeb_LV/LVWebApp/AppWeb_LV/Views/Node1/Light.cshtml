@@ -1,0 +1,78 @@
+﻿@model IEnumerable<AppWeb_LV.Models.DbTableNode1>
+
+
+<div id="chartContainer"></div>
+
+<script type="text/javascript">
+    var result = @Html.Raw(ViewBag.DataNode1);
+    var dataPoints = [];
+    var intervalType = "minute"
+    for (var i = 0; i < result.length; i++) {
+        dataPoints.push({ x: new Date(result[i].DateTime), y: result[i].Light });
+    }
+    $(function () {
+        var chart = new CanvasJS.Chart("chartContainer", {
+            theme: "dark2",
+            zoomEnabled: true,
+            animationEnabled: true,
+            title: {
+                text: "Light Sen"
+            },
+            axisY: {
+                valueFormatString: "###0 lux",
+            },
+            axisX: {
+                valueFormatString: "HH:mm:ss",
+            },
+            data: [
+                {
+                    xValueType: "dateTime",
+                    type: "line",
+                    color: "yellow",
+                    yValueFormatString: "###0 lux",
+                    xValueFormatString: "HH:mm:ss",
+                    dataPoints: dataPoints,
+                }
+            ]
+
+        });
+
+        while (dataPoints.length > 10) {
+            dataPoints.shift();
+        }
+        chart.render();
+
+        var IdVal = result[result.length - 1].Id;
+        var updateInterval = 500;
+        var str = "";
+        var Id_tmp = IdVal;
+        var x_tmp;
+        var y_tmp;
+        $.get("/Node1/DataFromDataBase", function (data, status) {
+            str = data;
+        });
+        var updateChart = function () {
+            $.get("/Node1/DataFromDataBase", function (data, status) {
+                str = data;
+            });
+            Id_tmp = Number(str.substring(str.lastIndexOf("Id") + 4, str.lastIndexOf("Temp") - 2));
+           
+            if (Id_tmp != IdVal) {
+                y_tmp = Number(str.substring(str.lastIndexOf("Light") + 7, str.lastIndexOf("Humidity") - 2));
+                x_tmp = str.substring(str.lastIndexOf("Time") + 7, str.lastIndexOf("}") - 1);
+                dataPoints.push({ x: new Date(x_tmp), y: y_tmp });
+                IdVal = Id_tmp;
+            }
+            //  chart.render();
+            // }
+            if (dataPoints.length > 10) {
+                dataPoints.shift();
+            }
+            //dataPoints.push({ x: 268, y: 23 });
+            chart.render();
+
+        };
+        setInterval(function () { updateChart() }, updateInterval);
+    });
+</script>
+

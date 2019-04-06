@@ -1,0 +1,179 @@
+﻿<label for="mode">Mode: </label>
+<input id="mode" type="text" size="8" style="text-align:center" readonly>
+<input onclick="Redirect();" type="button" value="Config" id="Btn">
+<br />
+<div style="width: 49%; height: 400px;display: inline-block; text-align:center; border:2px solid #d3d3d3;">
+    <br />
+    <br />
+    <center><h2>NODE 1</h2></center>
+    <br />
+    <h4>
+        <label for="t1">Temperature</label><br />
+        <input id="t1" type="text" size="10" step="any" style=" text-align:right" readonly>
+        <input id="Tht1" type="text" size="6" step="any" style=" text-align:right" readonly>
+        <br /><br />
+        <label for="l1">Light</label><br />
+        <input id="l1" type="text" size="10" step="any" style="text-align:right" readonly>
+        <input id="Thl1" type="text" size="6" step="any" style=" text-align:right" readonly>
+        <br /><br />
+        <label for="h1">Humidity</label><br />
+        <input id="h1" type="text" size="10" step="any" style="text-align:right" readonly>
+        <input id="Thh1" type="text" size="6" step="any" style=" text-align:right" readonly>
+        <br /><br />
+    </h4>
+</div>
+<div style="width: 49%; height: 400px;display: inline-block; text-align:center;  border:2px solid #d3d3d3;">
+    <br />
+    <br />
+    <center><h2>NODE 2</h2></center>
+    <br />
+    <h4>
+        <label for="t2">Temperature</label><br />
+        <input id="t2" type="text" size="10" step="any" style="text-align:right" readonly>
+        <input id="Tht2" type="text" size="6" step="any" style=" text-align:right" readonly>
+        <br /><br />
+        <label for="l2">Light</label><br />
+        <input id="l2" type="text" size="10" step="any" style="text-align:right" readonly>
+        <input id="Thl2" type="text" size="6" step="any" style=" text-align:right" readonly>
+        <br /><br />
+        <label for="h2">Humidity</label><br />
+        <input id="h2" type="text" size="10" step="any" style="text-align:right" readonly>
+        <input id="Thh2" type="text" size="6" step="any" style=" text-align:right" readonly>
+        <br /><br />
+    </h4>
+</div>
+<br />
+<div style="width: 98.5%; height: 330px;display: inline-block; text-align:center; border:2px solid #d3d3d3;">
+    <h2>RELAY STATUS</h2>
+    <div style="width: 49%; height: 200px;display: inline-block; text-align:center; ">
+        <label for="RL1">RL1</label><br />
+        <canvas id="RL1" width="100" height="50">
+            Trình duyệt này không hỗ trợ phần tử canvas.
+        </canvas><br />
+        <label for="RL2">RL2</label><br />
+        <canvas id="RL2" width="100" height="50">
+            Trình duyệt này không hỗ trợ phần tử canvas.
+        </canvas><br />
+        <label for="RL3">RL3</label><br />
+        <canvas id="RL3" width="100" height="50">
+            Trình duyệt này không hỗ trợ phần tử canvas.
+        </canvas>
+    </div>
+    <div style="width: 49%; height: 200px;display: inline-block; text-align:center; ">
+        <label for="RL4">RL4</label><br />
+        <canvas id="RL4" width="100" height="50">
+            Trình duyệt này không hỗ trợ phần tử canvas.
+        </canvas><br />
+        <label for="RL5">RL5</label><br />
+        <canvas id="RL5" width="100" height="50">
+            Trình duyệt này không hỗ trợ phần tử canvas.
+        </canvas><br />
+        <label for="RL6">RL6</label><br />
+        <canvas id="RL6" width="100" height="50">
+            Trình duyệt này không hỗ trợ phần tử canvas.
+        </canvas>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    var t1 = 0, l1 = 0, h1 = 0, t2 = 0, l2 = 0, h2 = 0;
+    var str1 = "", str2 = "", str3 = "", str4 = "", a_str1 = [], a_str2 = [];
+    var updateInterval = 100;
+    var c;
+    var ctx;
+    var grd;
+
+    function Redirect() {
+        window.location = "/Config/Config/";
+    }
+    var updateInfo = function () {
+        $.get("/Node1/DataFromDataBase", function (data, status) {
+            str1 = data;
+        });
+        t1 = str1.substring(str1.lastIndexOf("Temp") + 6, str1.lastIndexOf("Light") - 2);
+        l1 = str1.substring(str1.lastIndexOf("Light") + 7, str1.lastIndexOf("Humidity") - 2);
+        h1 = Number(str1.substring(str1.lastIndexOf("dity") + 6, str1.lastIndexOf("DateTime") - 2));
+
+        $.get("/Node2/DataFromDataBase", function (data, status) {
+            str2 = data;
+        });
+
+        t2 = str2.substring(str2.lastIndexOf("Temp") + 6, str2.lastIndexOf("Light") - 2);
+        l2 = str2.substring(str2.lastIndexOf("Light") + 7, str2.lastIndexOf("Humidity") - 2);
+        h2 = Number(str2.substring(str2.lastIndexOf("dity") + 6, str2.lastIndexOf("DateTime") - 2));
+
+        $.get("/RL.txt", function (data, status) {
+            str3 = data;
+        });
+
+        a_str1 = str3.split(' ');
+        for (var i = 1; i < a_str1.length; i++) {
+            c = document.getElementById("RL" + String(i));
+            if (a_str1[i] == "0") {
+                ctx = c.getContext("2d");
+                ctx.clearRect(0, 0, 100, 50);
+                grd = ctx.createRadialGradient(50, 25, 1, 50, 25, 50);
+                grd.addColorStop(1, "white");
+                grd.addColorStop(0, "red");
+                ctx.beginPath();
+                ctx.fillStyle = grd;
+                ctx.arc(50, 25, 20, 0, 2 * Math.PI);
+                ctx.strokeStyle = "white";
+                ctx.stroke();
+                ctx.fill();
+                ctx.closePath();
+            }
+            else {
+                ctx = c.getContext("2d");
+                ctx.clearRect(0, 0, 100, 50);
+                grd = ctx.createRadialGradient(50, 25, 1, 50, 25, 50);
+                grd.addColorStop(1, "white");
+                grd.addColorStop(0, "green");
+                ctx.beginPath();
+                ctx.fillStyle = grd;
+                ctx.arc(50, 25, 20, 0, 2 * Math.PI);
+                ctx.strokeStyle = "white";
+                ctx.stroke();
+                ctx.fill();
+                ctx.closePath();
+            }
+        }
+        if (!a_str1[0].includes("Auto")) {
+            document.getElementById("mode").value = "Manual";
+            document.getElementById("Tht1").disabled = true;
+            document.getElementById("Thl1").disabled = true;
+            document.getElementById("Thh1").disabled = true;
+            document.getElementById("Tht2").disabled = true;
+            document.getElementById("Thl2").disabled = true;
+            document.getElementById("Thh2").disabled = true;
+        }
+        else {
+            document.getElementById("mode").value = "Auto";
+            document.getElementById("Tht1").disabled = false;
+            document.getElementById("Thl1").disabled = false;
+            document.getElementById("Thh1").disabled = false;
+            document.getElementById("Tht2").disabled = false;
+            document.getElementById("Thl2").disabled = false;
+            document.getElementById("Thh2").disabled = false;
+        }
+        $.get("/TH.txt", function (data, status) {
+            str4 = data;
+        });
+        a_str2 = str4.split(' ');
+        document.getElementById("Tht1").value = "Th:" + a_str2[0];
+        document.getElementById("Thl1").value = "Th:" + a_str2[1];
+        document.getElementById("Thh1").value = "Th:" + String(Math.round(a_str2[2] * 1000) / 10);
+        document.getElementById("Tht2").value = "Th:" + a_str2[3];
+        document.getElementById("Thl2").value = "Th:" + a_str2[4];
+        document.getElementById("Thh2").value = "Th:" + String(Math.round(a_str2[5] * 1000) / 10);
+
+        document.getElementById("t1").value = t1 + "°C";
+        document.getElementById("l1").value = l1 + " lux";
+        document.getElementById("h1").value = String(Math.round(h1 * 1000) / 10) + "%";
+        document.getElementById("t2").value = t2 + "°C";
+        document.getElementById("l2").value = l2 + " lux";
+        document.getElementById("h2").value = String(Math.round(h2 * 1000) / 10) + "%";
+    };
+    setInterval(function () { updateInfo() }, updateInterval);
+</script>

@@ -1,0 +1,83 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: µVision V5.24.2.0
+Copyright (C) 2017 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: Sang dns_2996@yahoo.com, asd , LIC=CRMQD-8XVDP-5AHDF-62GGD-23WTA-68MDG
+ 
+Tool Versions:
+Toolchain:       MDK-ARM Professional  Version: 5.24.1
+Toolchain Path:  D:\Keil_v5\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.06 update 5 (build 528)
+Assembler:       Armasm.exe V5.06 update 5 (build 528)
+Linker/Locator:  ArmLink.exe V5.06 update 5 (build 528)
+Library Manager: ArmAr.exe V5.06 update 5 (build 528)
+Hex Converter:   FromElf.exe V5.06 update 5 (build 528)
+CPU DLL:         SARMCM3.DLL V5.24.1
+Dialog DLL:      DCM.DLL V1.16.0.0
+Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.0.1.0
+Dialog DLL:      TCM.DLL V1.32.0.0
+ 
+<h2>Project:</h2>
+F:\TL-MH BK\LV\LV-STM\LV-STM\MDK-ARM\test.uvprojx
+Project File Date:  01/05/2019
+
+<h2>Output:</h2>
+*** Using Compiler 'V5.06 update 5 (build 528)', folder: 'D:\Keil_v5\ARM\ARMCC\Bin'
+Build target 'test'
+compiling main.c...
+../Src/main.c(153): warning:  #177-D: variable "vt_stt"  was declared but never referenced
+  	int vt_b=0,vt_stt=0;
+../Src/main.c(167): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "uint8_t *"
+   	    HAL_UART_Transmit_IT(&huart6,send,strlen(send));
+../Src/main.c(180): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "uint8_t *"
+  			HAL_UART_Transmit_IT(&huart6,send,strlen(send));
+../Src/main.c(194): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "uint8_t *"
+    	  HAL_UART_Transmit_IT(&huart6,send,strlen(send));
+../Src/main.c(211): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "uint8_t *"
+    	  HAL_UART_Transmit_IT(&huart6,send,strlen(send));
+../Src/main.c(231): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "uint8_t *"
+    	  HAL_UART_Transmit_IT(&huart6,send,strlen(send));
+../Src/main.c(246): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "uint8_t *"
+  			HAL_UART_Transmit_IT(&huart6,send,strlen(send));
+../Src/main.c(247): warning:  #177-D: variable "vtG_old"  was declared but never referenced
+  			 int vtG_old=0;
+../Src/main.c(269): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "uint8_t *"
+    	  HAL_UART_Transmit_IT(&huart6,send,strlen(send));
+../Src/main.c(289): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "uint8_t *"
+  			HAL_UART_Transmit_IT(&huart6,send,strlen(send));
+../Src/main.c(380): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "uint8_t *"
+  	HAL_UART_Transmit_IT(&huart2,zigbee,2);
+../Src/main.c: 11 warnings, 0 errors
+linking...
+Program Size: Code=11278 RO-data=602 RW-data=32 ZI-data=51704  
+FromELF: creating hex file...
+".\test\test.axf" - 0 Error(s), 11 Warning(s).
+
+<h2>Software Packages used:</h2>
+
+Package Vendor: ARM
+                http://www.keil.com/pack/ARM.CMSIS.5.3.0.pack
+                ARM.CMSIS.5.3.0
+                CMSIS (Cortex Microcontroller Software Interface Standard)
+   * Component: CORE Version: 5.1.1
+
+Package Vendor: Keil
+                http://www.keil.com/pack/Keil.STM32F4xx_DFP.2.13.0.pack
+                Keil.STM32F4xx_DFP.2.13.0
+                STMicroelectronics STM32F4 Series Device Support, Drivers and Examples
+
+<h2>Collection of Component include folders:</h2>
+  .\RTE\_test
+  D:\Keil_v5\ARM\PACK\ARM\CMSIS\5.3.0\CMSIS\Include
+  D:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include
+
+<h2>Collection of Component Files used:</h2>
+
+   * Component: ARM::CMSIS:CORE:5.1.1
+Build Time Elapsed:  00:00:07
+</pre>
+</body>
+</html>

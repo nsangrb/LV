@@ -1,0 +1,153 @@
+﻿@model IEnumerable<AppWeb_LV.Models.DbTableNode1>
+
+@{
+    ViewBag.Title = "Multiple Charts in a Page";
+}
+
+<div id="chartContainer1" style="width: 49%; height: 300px;display: inline-block;"></div>
+<div id="chartContainer2" style="width: 49%; height: 300px;display: inline-block;"></div>
+<br /><br />
+<center><div id="chartContainer3" style="width: 49%; height: 300px;display: inline-block;"></div></center>
+
+
+<script type="text/javascript">
+    var result = @Html.Raw(ViewBag.DataNode1);
+    var dataPoints1 = [], dataPoints2 = [], dataPoints3 = [];
+    var intervalType = "minute";
+    for (var i = 0; i < result.length; i++) {
+        dataPoints1.push({ x: new Date(result[i].DateTime), y: result[i].Temp });
+        dataPoints2.push({ x: new Date(result[i].DateTime), y: result[i].Light });
+        dataPoints3.push({ x: new Date(result[i].DateTime), y: result[i].Humidity });
+    }
+    $(function () {
+        var chart1 = new CanvasJS.Chart("chartContainer1", {
+            theme: "dark2",
+            zoomEnabled: true,
+            animationEnabled: true,
+            title: {
+                text: "Temperature"
+            },
+            axisY: {
+                valueFormatString: "##0 °C",
+            },
+            axisX: {
+                valueFormatString: "HH:mm:ss",
+            },
+            data: [
+                {
+                    xValueType: "dateTime",
+                    type: "line",
+                    color: "red",
+                    yValueFormatString: "##0 °C",
+                    xValueFormatString: "HH:mm:ss",
+                    dataPoints: dataPoints1,
+                }
+            ]
+
+        });
+        while (dataPoints1.length > 10) {
+            dataPoints1.shift();
+        }
+        chart1.render();
+
+        var chart2 = new CanvasJS.Chart("chartContainer2", {
+            theme: "dark2",
+            zoomEnabled: true,
+            animationEnabled: true,
+            title: {
+                text: "Light Sen"
+            },
+            axisY: {
+                valueFormatString: "###0 lux",
+            },
+            axisX: {
+                valueFormatString: "HH:mm:ss",
+            },
+            data: [
+                {
+                    xValueType: "dateTime",
+                    type: "line",
+                    color: "yellow",
+                    yValueFormatString: "###0 lux",
+                    xValueFormatString: "HH:mm:ss",
+                    dataPoints: dataPoints2,
+                }
+            ]
+        });
+        while (dataPoints2.length > 10) {
+            dataPoints2.shift();
+        }
+        chart2.render();
+
+        var chart3 = new CanvasJS.Chart("chartContainer3",
+            {
+                theme: "dark2",
+                zoomEnabled: true,
+                animationEnabled: true,
+                title: {
+                    text: "Humidity"
+                },
+                axisY: {
+                    valueFormatString: "##0.# %",
+                },
+                axisX: {
+                    valueFormatString: "HH:mm:ss",
+                },
+                data: [
+                    {
+                        xValueType: "dateTime",
+                        type: "line",
+                        color: "lightblue",
+                        yValueFormatString: "##0.# %",
+                        xValueFormatString: "HH:mm:ss",
+                        dataPoints: dataPoints3,
+                    }
+                ]
+            });
+        while (dataPoints3.length > 10) {
+            dataPoints3.shift();
+        }
+        chart3.render();
+
+        var IdVal = result[result.length - 1].Id;
+        var updateInterval = 500;
+        var str = "";
+        var Id_tmp = IdVal;
+        var x_tmp;
+        var y1_tmp;
+        var y2_tmp;
+        var y3_tmp;
+        $.get("/Node1/DataFromDataBase", function (data, status) {
+            str = data;
+        });
+        var updateChart = function () {
+            $.get("/Node1/DataFromDataBase", function (data, status) {
+                str = data;
+            });
+            Id_tmp = Number(str.substring(str.lastIndexOf("Id") + 4, str.lastIndexOf("Temp") - 2));
+            if (Id_tmp != IdVal) {
+                y1_tmp = Number(str.substring(str.lastIndexOf("Temp") + 6, str.lastIndexOf("Light") - 2));
+                y2_tmp = Number(str.substring(str.lastIndexOf("Light") + 7, str.lastIndexOf("Humidity") - 2));
+                y3_tmp = Math.round(Number(str.substring(str.lastIndexOf("dity") + 6, str.lastIndexOf("DateTime") - 2))*1000)/1000;
+                x_tmp = str.substring(str.lastIndexOf("Time") + 7, str.lastIndexOf("}") - 1);
+                dataPoints1.push({ x: new Date(x_tmp), y: y1_tmp });
+                dataPoints2.push({ x: new Date(x_tmp), y: y2_tmp });
+                dataPoints3.push({ x: new Date(x_tmp), y: y3_tmp });
+                IdVal = Id_tmp;
+            }
+            //  chart.render();
+            // }
+            if (dataPoints1.length > 10) {
+                dataPoints1.shift();
+                dataPoints2.shift();
+                dataPoints3.shift();
+            }
+            //dataPoints.push({ x: 268, y: 23 });
+            chart1.render();
+            chart2.render();
+            chart3.render();
+
+        };
+        setInterval(function () { updateChart() }, updateInterval);
+    });
+</script>
